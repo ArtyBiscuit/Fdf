@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
+#include <stdio.h>
+#include <fcntl.h>
 
 typedef struct	s_point
 {
@@ -19,18 +21,29 @@ typedef struct	s_point
 	int		color;
 }				t_point;
 
-int	**pars_map(char *map)
+void	pars_map(char *map)
 {
+	int	read_size;
 	int	descriptor;
-	char *buff;
+	char buff[1];
 	char **t_map;
 
+	read_size = 1;
 	descriptor = open(map, O_RDONLY);
 	if (!descriptor)
-		return (NULL);
-	while ()
+		return ;
+	printf("Start !");
+	while (read_size >= 1)
 	{
-		buff = get_next_line(descriptor);
-		ft_strlen()
+		read_size = read(descriptor, buff, 1);
+		if (!buff)
+			return ;
+		printf("%s", buff);
 	}
+	printf("%d", read_size);
+}
+
+int	main(void)
+{
+	pars_map("maps/test_maps/t1.fdf");
 }
