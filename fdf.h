@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 15:34:56 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/05 17:17:45 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/06 19:57:21 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -39,9 +39,9 @@ struct	s_img{
 };
 
 struct	s_point{
-	float	x;
-	float	y;
-	float	z;
+	int	x;
+	int	y;
+	int	z;
 	int		color;
 };
 
@@ -50,4 +50,5 @@ struct	s_map{
 	int size_x;
 	int size_y;
 };
+
 #endif

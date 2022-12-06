@@ -6,103 +6,107 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 16:44:04 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/05 17:19:39 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/06 20:44:09 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
 #include <stdio.h>
 #include <fcntl.h>
 
-static char	*get_file_data(char *path_map)
+static char	*get_file_data(char *path_file)
 {
-	int		descriptor;
-	int		read_size;
-	char	*tmp;
-	char	*map;
+	int		fd;
+	char	*buff;
+	char	*str;
 
-	map = NULL;
-	tmp = NULL;
-	read_size = 1;
-	descriptor = open(path_map, O_RDONLY);
-	if (descriptor < 0)
+	buff = NULL;
+	str = NULL;
+	fd = open(path_file, O_RDONLY);
+	if (fd < 0)
 		return (NULL);
-	while (read_size)
+	while (!buff)
 	{
-		tmp = ft_calloc(200+1, 1);
-		read_size = read(descriptor, tmp, 200);
-		if (!read_size)
-			break;
-		map = ft_secur_cat(map, tmp);
+		buff = get_next_line(fd);
+		if (!buff)
+			break ;
+		str = ft_secur_cat(str, buff);
+		buff = NULL;
 	}
-	free(tmp);
-	close(descriptor);
-	return (map);
+	free(buff);
+	close(fd);
+	return (str);
 }
 
-static int	get_line(char *map)
+t_point	*new_point(int x, int y, int z, int color)
 {
-	int	cmp;
-	int	line;
+	t_point *point;
 
-	cmp = -1;
-	line = 0;
-	while (map[cmp++])
-		if (map[cmp] == '\n')
-			line++;
-	return (line);
-}
-static int get_column(char *map)
-{
-	int	cmp;
-	int	bol;
-	int	column;
-
-	cmp = 0;
-	bol = 0;
-	column = 0;
-	while (map[cmp] && map[cmp] != '\n')
-	{
-		if (map[cmp] == ' ')
-			column++;
-		cmp++;
-	}
-	return (column);
-}
-
-static t_map	init_struct_map(char *map)
-{
-	t_point **tab;
-	t_map	final_map;
-
-	int cmp;	
-	int	line;
-	int	column;
-
-	if (!map)
+	point = malloc(sizeof(t_point) * 1);
+	if (!point)
 		return (NULL);
-	cmp = -1;
-	line = get_line(map);
-	column = get_column(map);
-	tab = malloc(sizeof(t_point *) * line);
-	while(cmp++ < line)
-		tab[cmp] = malloc(sizeof(t_point) * column);
-	final_map->map = tab;
-	final_map->size_x = column;
-	final_map->size_y = line;
-	return (final_map);
+	point->x = x;
+	point->y = y;
+	point->z = z;
+	point->color = color;
+	return (point);
 }
 
-t_map	parse_map(char *path_map)
+int	is_num(char c)
 {
-	int		index;
-	char	*hard_data;
-	t_map	map;
+	if (c <= 48 && c >= 57)
+		return (1);
+	return (0);
+}
 
-	index = 0;
-	hard_data = get_file_data(path_map);
-	map = init_struct_map(hard_data);
-	while (hard_data[index])
+t_point	*get_data(char *data, int x, int y)
+{
+	t_point	*point;
+	int	z;
+	int	color;
+
+	color = 0;
+	while (*data == ' ')
+		(*data)++;
+	z = ft_atoi(data);
+	while (is_num(*data))
+		(*data)++;
+	if (*data == ',')
+		while(*data != ' ' || *data != '\n')
+			(*data)++;
+	point = new_point(x, y, z, color);
+	return (point);
+}
+
+int main(void)
+{
+	t_point *point;
+	char	*data;
+	int		x;
+	int		y;
+	int i;
+
+	i = 0;
+	x = 0;
+	y = 0;
+	data = get_file_data("maps/test_maps/t2.fdf");
+	while (data)
 	{
-		
+		point = get_data(data, x, y);
+		printf("X:%d Y:%d Z:%d\n", point->x, point->y, point->z);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
