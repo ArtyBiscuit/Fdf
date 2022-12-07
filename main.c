@@ -6,12 +6,12 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/25 15:08:10 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/01 16:50:43 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/07 20:05:12 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
 
-int	close(int key_code, t_vars *mlx_data)
+int	mlx_close(int key_code, t_vars *mlx_data)
 {
 	(void) key_code;
 	mlx_loop_end(mlx_data->mlx);
@@ -39,7 +39,13 @@ int	main(void)
 
 	mlx_full_init(&mlx_data, WIN_SIZE_X, WIN_SIZE_Y, "MY FDF!");
 
-	mlx_hook(mlx_data.win, 17, 0L, close, &mlx_data);
+	mlx_hook(mlx_data.win, 17, 0L, mlx_close, &mlx_data);
+
+ 	img.img = mlx_new_image(mlx_data.mlx, 640, 360);
+	img.buff_pix = mlx_get_data_addr(img.img, &img.pix_bit, &img.line_size, &img.endian);
+	dda_algorithme(mlx_data, 0.0, 0.0, 300.0, 300.0);
+	mlx_put_image_to_window(mlx_data.mlx, mlx_data.win, img.img, 0, 0);
+
 	mlx_loop(mlx_data.mlx);
 
 	mlx_clear_window(mlx_data.mlx, mlx_data.win);

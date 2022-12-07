@@ -6,107 +6,93 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 16:44:04 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/06 20:44:09 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/07 17:54:18 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
-#include <stdio.h>
-#include <fcntl.h>
 
-static char	*get_file_data(char *path_file)
+int	get_y_size(char *data)
 {
-	int		fd;
-	char	*buff;
-	char	*str;
+	int	y;
+	int	index;
 
-	buff = NULL;
-	str = NULL;
-	fd = open(path_file, O_RDONLY);
-	if (fd < 0)
-		return (NULL);
-	while (!buff)
+	y = 0;
+	index = 0;
+	while (data[index] != '\0')
 	{
-		buff = get_next_line(fd);
-		if (!buff)
-			break ;
-		str = ft_secur_cat(str, buff);
-		buff = NULL;
+		if (data[index] == '\n')
+			y++;
+		index++;
 	}
-	free(buff);
-	close(fd);
-	return (str);
+	return (y);
 }
 
-t_point	*new_point(int x, int y, int z, int color)
+int	get_x_size(char *data)
 {
-	t_point *point;
+	int	x;
+	int	index;
 
-	point = malloc(sizeof(t_point) * 1);
-	if (!point)
-		return (NULL);
-	point->x = x;
-	point->y = y;
-	point->z = z;
-	point->color = color;
-	return (point);
+	x = 0;
+	index = 0;
+	while (data[index] != '\n')
+	{
+		if (data[index] != ' ' && data[index] != '\n')
+		{
+			x++;
+			while (data[index] != ' ' && data[index] != '\n')
+				index++;
+		}
+		while (data[index] == ' ' && data[index] != '\n')
+			index++;
+	}
+	return (x);
 }
 
-int	is_num(char c)
+t_point	***init_tab(char *data)
 {
-	if (c <= 48 && c >= 57)
-		return (1);
-	return (0);
-}
-
-t_point	*get_data(char *data, int x, int y)
-{
-	t_point	*point;
-	int	z;
-	int	color;
-
-	color = 0;
-	while (*data == ' ')
-		(*data)++;
-	z = ft_atoi(data);
-	while (is_num(*data))
-		(*data)++;
-	if (*data == ',')
-		while(*data != ' ' || *data != '\n')
-			(*data)++;
-	point = new_point(x, y, z, color);
-	return (point);
-}
-
-int main(void)
-{
-	t_point *point;
-	char	*data;
-	int		x;
-	int		y;
-	int i;
+	t_point	***tab_point;
+	int		size_x;
+	int		size_y;
+	int		i;
 
 	i = 0;
-	x = 0;
-	y = 0;
-	data = get_file_data("maps/test_maps/t2.fdf");
-	while (data)
+	size_x = get_x_size(data);
+	size_y = get_y_size(data);
+	tab_point = malloc(sizeof(t_point **) * size_y);
+	while (i < size_y)
 	{
-		point = get_data(data, x, y);
-		printf("X:%d Y:%d Z:%d\n", point->x, point->y, point->z);
+		tab_point[i] = malloc(sizeof(t_point *) * size_x);
+		i++;
 	}
+	return (tab_point);
 }
 
+t_point	***get_matrix(char *data)
+{
+	t_point	***map;
+	t_point	*point;
 
+	map = init_tab(data);
+	while (data)
+	{
+		point = get_point(&data);
+		if (point == NULL)
+			break ;
+		map[(int)point->y][(int)point->x] = point;
+	}
+	return (map);
+}
 
+t_map	*get_map(char *path_file)
+{
+	t_map	*map;
+	char	*data;
 
-
-
-
-
-
-
-
-
-
-
-
+	data = get_file_data(path_file);
+	map = malloc(sizeof(t_map) * 1);
+	map->map = get_matrix(data);
+	map->size_x = get_x_size(data);
+	map->size_y = get_y_size(data);
+	free(data);
+	return (map);
+}
