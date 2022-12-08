@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 17:48:42 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/07 17:56:15 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/08 20:07:10 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -31,7 +31,7 @@ t_point	*get_data(char **data, int x, int y)
 	int		z;
 	int		color;
 
-	color = 0;
+	color = 0xFFFFFF;
 	if (**data == '\0')
 		return (NULL);
 	while (**data == ' ')
@@ -45,6 +45,8 @@ t_point	*get_data(char **data, int x, int y)
 		while (**data != ' ' && **data != '\n')
 			(*data)++;
 	point = new_point(x, y, z, color);
+	if (point->z > 5)
+		point->color = 0x008989;
 	return (point);
 }
 
@@ -75,14 +77,9 @@ char	*get_file_data(char *path_file)
 t_point	*get_point(char **data)
 {
 	t_point		*point;
-	static int	x;
-	static int	y;
+	static int	x = 0;
+	static int	y = 0;
 
-	if (!x && !y)
-	{
-		x = 0;
-		y = 0;
-	}
 	point = get_data(data, x, y);
 	x++;
 	if (point == NULL)

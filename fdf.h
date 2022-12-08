@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 15:34:56 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/07 20:04:07 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/08 20:01:57 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -14,12 +14,13 @@
 
 # include <stdlib.h>
 # include <fcntl.h>
+# include <math.h>
 # include "mlx/mlx.h"
 # include "libft/libft.h"
 
 #define MLX_ERROR 1
-#define WIN_SIZE_X 600
-#define WIN_SIZE_Y 600
+#define WIN_SIZE_X 1920
+#define WIN_SIZE_Y 1080
 
 typedef struct  s_vars t_vars;
 typedef struct	s_img t_img;
@@ -52,7 +53,9 @@ struct	s_map{
 	int size_y;
 };
 
-//t_point *new_point(int x, int y, int z, int color);
+t_point *new_point(int x, int y, int z, int color);
+void    dda_algorithme(t_point start, t_point end, t_img *data, float mult);
+void    pixel_put(t_img *data, int x, int y, int color);
 t_point *get_data(char **data, int x, int y);
 char    *get_file_data(char *path_file);
 t_point *get_point(char **data);
