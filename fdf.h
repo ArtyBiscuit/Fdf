@@ -52,7 +52,7 @@ struct	s_map{
 	int size_y;
 };
 
-t_point *new_point(int x, int y, int z, int color);
+//t_point *new_point(int x, int y, int z, int color);
 t_point *get_data(char **data, int x, int y);
 char    *get_file_data(char *path_file);
 t_point *get_point(char **data);
@@ -61,5 +61,4 @@ int get_x_size(char *data);
 t_point ***init_tab(char *data);
 t_point ***get_matrix(char *data);
 t_map   *get_map(char *path_file);
-void    dda_algorithme(t_vars vars, float x0, float y0, float x1, float y1);
 #endif
