@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 15:34:56 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/08 20:01:57 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:31:20 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef FDF_H
@@ -54,7 +54,7 @@ struct	s_map{
 };
 
 t_point *new_point(int x, int y, int z, int color);
-void    dda_algorithme(t_point start, t_point end, t_img *data, float mult);
+void    dda(t_point start, t_point end, t_img *data, float mult);
 void    pixel_put(t_img *data, int x, int y, int color);
 t_point *get_data(char **data, int x, int y);
 char    *get_file_data(char *path_file);
@@ -64,4 +64,8 @@ int get_x_size(char *data);
 t_point ***init_tab(char *data);
 t_point ***get_matrix(char *data);
 t_map   *get_map(char *path_file);
+int mlx_close(t_vars *mlx_data);
+int mlx_key(int keycode, t_vars *mlx_data);
+void    free_all(t_map *map);
+void    mlx_abort(t_vars mlx_data, t_img i);
 #endif

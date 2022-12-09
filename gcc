@@ -1,0 +1,1 @@
+gcc -g3 main.c dda_alogo.c get_data.c pars_map.c close_mlx.c libft/*.c -lmlx -Lmlx -lX11 -lXext -lm

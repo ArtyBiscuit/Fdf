@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 16:44:04 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/08 17:34:37 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/09 17:20:41 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -46,7 +46,7 @@ int	get_x_size(char *data)
 			index++;
 	}
 	return (x);
-t_point ***map;}
+}
 
 t_point	***init_tab(char *data)
 {
@@ -89,6 +89,8 @@ t_map	*get_map(char *path_file)
 	char	*data;
 
 	data = get_file_data(path_file);
+	if (data == NULL)
+		return (NULL);
 	map = malloc(sizeof(t_map) * 1);
 	map->map = get_matrix(data);
 	map->size_x = get_x_size(data);

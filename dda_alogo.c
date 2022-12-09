@@ -6,7 +6,7 @@
 /*   By: arforgea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 18:24:27 by arforgea          #+#    #+#             */
-/*   Updated: 2022/12/08 20:36:04 by arforgea         ###   ########.fr       */
+/*   Updated: 2022/12/09 15:28:56 by arforgea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "fdf.h"
@@ -14,32 +14,37 @@
 void	pixel_put(t_img *data, int x, int y, int color)
 {
 	char	*dst;
-	
+
 	if (x < 0 || x > WIN_SIZE_X || y < 0 || y > WIN_SIZE_Y)
 		return ;
 	dst = data->buff_pix + (y * data->line_size + x * (data->pix_bit / 8));
-	*(unsigned int*)dst = color;
+	*(unsigned int *)dst = color;
 }
 
 void	iso(t_point *point)
 {
-	point->x = ((point->x - point->y) * sin(0.6f)) + 700.0f;
-	point->y = ((point->x + point->y) * sin(0.6f) - point->z) + 50.0f;
+	point->x = ((point->x - point->y) * sin(0.6f)) + 800.0f;
+	point->y = ((point->x + point->y) * sin(0.6f) - point->z) + 0.0f;
 }
 
-void	dda_algorithme(t_point start, t_point end, t_img *data, float mult)
+void	ft_zoom(t_point *start, t_point *end, float zoom)
+{
+	end->x *= zoom;
+	end->y *= zoom;
+	end->z *= zoom / 10.0f;
+	start->x *= zoom;
+	start->y *= zoom;
+	start->z *= zoom / 10.0f;
+}
+
+void	dda(t_point start, t_point end, t_img *data, float zoom)
 {
 	float	d_y;
 	float	d_x;
 	float	steps;
 	float	cmp;
-	
-	end.x *= mult;
-	end.y *= mult;
-	end.z *= mult / 10.0f;
-	start.x *= mult;
-	start.y *= mult;
-	start.z *= mult / 10.0f;
+
+	ft_zoom(&start, &end, zoom);
 	iso(&start);
 	iso(&end);
 	d_y = end.y - start.y;
